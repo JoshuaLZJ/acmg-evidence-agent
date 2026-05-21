@@ -1,0 +1,82 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Local environment and secrets
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Project runtime caches and logs
+.cache/
+debug_messages.json
+*.log
+
+# Generated reports and exports
+reports/
+output/
+
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# OS-generated files
+Thumbs.db
+
+# Bioinformatics large/intermediate files
+*.bam
+*.bai
+*.cram
+*.crai
+*.vcf
+*.vcf.gz
+*.tbi
+*.bcf
+*.bed.gz
+*.bw
+*.bigWig
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.fasta
+*.fa
+*.fa.gz
+*.fai
+*.sam
+
+# Optional: keep sample data tracked by commenting out lines above
+# and placing small examples under examples/

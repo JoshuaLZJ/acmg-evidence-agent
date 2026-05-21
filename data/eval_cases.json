@@ -1,0 +1,16 @@
+[
+  {
+    "variant": "BRCA1 p.Val1736Ala",
+    "gene": "BRCA1",
+    "disease": "hereditary breast and ovarian cancer",
+    "expected_evidence_types": ["previous_classification", "functional", "case_level"],
+    "expected_classification_band": "pathogenic_or_likely_pathogenic"
+  },
+  {
+    "variant": "rs121913529",
+    "gene": "BRCA1",
+    "disease": "hereditary breast and ovarian cancer",
+    "expected_evidence_types": ["previous_classification", "case_level"],
+    "expected_classification_band": "pathogenic_or_likely_pathogenic"
+  }
+]

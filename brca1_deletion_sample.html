@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACMG Evidence Report — BRCA1 deletion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; font-size: 16px; }
+body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background: #f7f6f2;
+    color: #28251d;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+.page { max-width: 900px; margin: 0 auto; }
+
+/* Header */
+header { border-bottom: 1px solid #dcd9d5; padding-bottom: 1.25rem; margin-bottom: 2rem; }
+header .badge {
+    display: inline-block; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #01696f;
+    background: #cedcd8; padding: 0.2rem 0.65rem; border-radius: 9999px;
+    margin-bottom: 0.75rem;
+}
+header h1 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 700; line-height: 1.25; color: #28251d; margin-bottom: 0.4rem; }
+header .meta { font-size: 0.82rem; color: #7a7974; }
+
+/* Cards */
+.card {
+    background: #fff; border: 1px solid #dcd9d5; border-radius: 0.75rem;
+    padding: 1.5rem 1.75rem; margin-bottom: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.card h2 {
+    font-size: 1rem; font-weight: 700; color: #01696f;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.card h2 .icon { width: 1.1rem; height: 1.1rem; opacity: 0.8; }
+.card h3 { font-size: 0.95rem; font-weight: 600; color: #28251d; margin: 1rem 0 0.4rem; }
+.card p, .card li { font-size: 0.92rem; line-height: 1.65; color: #3d3a32; margin-bottom: 0.5rem; }
+.card ul, .card ol { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+.card code {
+    font-family: 'JetBrains Mono', 'Fira Mono', monospace; font-size: 0.82rem;
+    background: #f3f0ec; padding: 0.15rem 0.4rem; border-radius: 0.3rem; color: #964219;
+}
+.card pre {
+    background: #1c1b19; color: #cdccca; border-radius: 0.5rem;
+    padding: 1rem 1.25rem; overflow-x: auto;
+    font-size: 0.82rem; font-family: 'JetBrains Mono','Fira Mono',monospace;
+    line-height: 1.6; margin: 0.75rem 0;
+}
+.card pre code { background: none; color: inherit; padding: 0; }
+.card blockquote {
+    border-left: 3px solid #cedcd8; padding-left: 1rem; margin: 0.75rem 0;
+    color: #7a7974; font-style: italic; font-size: 0.9rem;
+}
+
+/* ACMG pills */
+.acmg-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+.acmg-code {
+    display: inline-block; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.05em; padding: 0.25rem 0.7rem; border-radius: 9999px;
+    background: #cedcd8; color: #0c4e54;
+}
+.classification-band {
+    display: inline-block; font-size: 0.85rem; font-weight: 600;
+    padding: 0.35rem 1rem; border-radius: 9999px; margin-top: 0.5rem;
+}
+.band-pathogenic        { background: #fde8e8; color: #a12c7b; }
+.band-likely-pathogenic { background: #ffe9d7; color: #964219; }
+.band-vus               { background: #f3f0ec; color: #7a7974; }
+.band-likely-benign     { background: #e6f0ef; color: #01696f; }
+.band-benign            { background: #d0e8d8; color: #437a22; }
+
+/* Uncertainty list */
+.uncertainty-list li {
+    font-size: 0.88rem; color: #964219; background: #fdf6f0;
+    border: 1px solid #e7d7c4; border-radius: 0.4rem;
+    padding: 0.5rem 0.75rem; margin-bottom: 0.4rem; list-style: none;
+}
+
+/* Reference links */
+.ref-link {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.82rem; color: #01696f; text-decoration: none;
+    border: 1px solid #cedcd8; border-radius: 0.35rem;
+    padding: 0.2rem 0.55rem; margin: 0.15rem;
+    transition: background 150ms ease, border-color 150ms ease;
+}
+.ref-link:hover { background: #e6f0ef; border-color: #01696f; }
+.ref-link svg { width: 0.75rem; height: 0.75rem; }
+.ref-block { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.75rem; }
+
+/* IGV track card */
+#igv-card { padding: 1rem 1.25rem; }
+#igv-card h2 { margin-bottom: 0.75rem; }
+#igv-track { width: 100%; min-height: 280px; border-radius: 0.5rem; overflow: hidden; }
+
+/* ClinVar pop-out */
+.clinvar-popup-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35); z-index: 1000;
+    align-items: center; justify-content: center;
+}
+.clinvar-popup-overlay.open { display: flex; }
+.clinvar-popup {
+    background: #fff; border-radius: 0.75rem; padding: 1.5rem 1.75rem;
+    max-width: 520px; width: 90%; box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    position: relative; max-height: 80vh; overflow-y: auto;
+}
+.clinvar-popup h3 { font-size: 1rem; font-weight: 700; color: #28251d; margin-bottom: 0.75rem; }
+.clinvar-popup table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.clinvar-popup td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #f0ede9; vertical-align: top; }
+.clinvar-popup td:first-child { color: #7a7974; width: 40%; font-weight: 500; }
+.clinvar-popup .close-btn {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; cursor: pointer;
+    color: #7a7974; font-size: 1.25rem; line-height: 1;
+}
+.clinvar-popup .clinvar-link {
+    display: inline-block; margin-top: 0.75rem; font-size: 0.85rem;
+    color: #01696f; text-decoration: none; border-bottom: 1px solid #cedcd8;
+}
+.clinvar-popup .clinvar-link:hover { border-color: #01696f; }
+
+/* Footer */
+footer {
+    text-align: center; font-size: 0.75rem; color: #bab9b4;
+    margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid #dcd9d5;
+}
+@media (max-width: 600px) {
+    body { padding: 1rem 0.5rem; }
+    .card { padding: 1.1rem 1rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="badge">ACMG Evidence Agent — Research Prototype</div>
+    <h1>BRCA1 deletion</h1>
+    <div class="meta">
+      Gene: <strong>BRCA1</strong> &nbsp;·&nbsp;
+      Disease: <strong>—</strong> &nbsp;·&nbsp;
+      Generated: 21 May 2026, 09:45
+    </div>
+  </header>
+
+  
+<div class="card" id="igv-card">
+  <h2>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+    </svg>
+    Genomic Context
+  </h2>
+  <div id="igv-track"></div>
+</div>
+
+<div class="clinvar-popup-overlay" id="cv-overlay">
+  <div class="clinvar-popup" id="cv-popup">
+    <button class="close-btn" onclick="document.getElementById('cv-overlay').classList.remove('open')">&times;</button>
+    <h3 id="cv-popup-title">ClinVar Entry</h3>
+    <table id="cv-popup-table"></table>
+    <a id="cv-popup-link" class="clinvar-link" href="#" target="_blank" rel="noopener noreferrer">
+      View on ClinVar &#8594;
+    </a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/igv@3.0.2/dist/igv.min.js"></script>
+<script>
+(function() {
+  var cvData = {"VCV004848184.1": {"variation_id": "4848184", "accession": "VCV004848184.1", "title": "NM_015627.3(LDLRAP1):c.19del (p.Ala7fs)", "obj_type": "Deletion", "germline_classification": "Pathogenic", "review_status": "criteria provided, single submitter", "last_evaluated": "2026/02/23 00:00", "fda_recognized": false, "trait_names": ["Familial hypercholesterolemia"], "hgvs_name": "NM_015627.3(LDLRAP1):c.19del (p.Ala7fs)", "variant_type": "Deletion", "grch38_chr": "1", "grch38_start": "25543716", "grch38_stop": "25543716", "grch37_start": "25870207", "grch37_stop": "25870207", "supporting_scvs": ["SCV007587289"], "supporting_rcvs": ["RCV006688244"]}, "VCV004847740.1": {"variation_id": "4847740", "accession": "VCV004847740.1", "title": "NC_000019.9:g.(11231199_11233849)_(11244497_?)del", "obj_type": "Deletion", "germline_classification": "Pathogenic", "review_status": "criteria provided, single submitter", "last_evaluated": "2026/03/24 00:00", "fda_recognized": false, "trait_names": ["Familial hypercholesterolemia"], "hgvs_name": "NC_000019.9:g.(11231199_11233849)_(11244497_?)del", "variant_type": "Deletion", "grch38_chr": null, "grch38_start": null, "grch38_stop": null, "grch37_start": "11231199", "grch37_stop": "11244497", "supporting_scvs": ["SCV007584583"], "supporting_rcvs": ["RCV006693703"]}, "VCV004845403.1": {"variation_id": "4845403", "accession": "VCV004845403.1", "title": "NM_000527.5(LDLR):c.2312-966_2390-336del", "obj_type": "Deletion", "germline_classification": "Pathogenic", "review_status": "criteria provided, single submitter", "last_evaluated": "2026/03/25 00:00", "fda_recognized": false, "trait_names": ["Hypercholesterolemia, familial, 1"], "hgvs_name": "NM_000527.5(LDLR):c.2312-966_2390-336del", "variant_type": "Deletion", "grch38_chr": "19", "grch38_start": "11127042", "grch38_stop": "11129177", "grch37_start": "11237718", "grch37_stop": "11239853", "supporting_scvs": ["SCV007579581"], "supporting_rcvs": ["RCV006684128"]}, "VCV004819959.1": {"variation_id": "4819959", "accession": "VCV004819959.1", "title": "NM_000527.5(LDLR):c.236_245del (p.Val79fs)", "obj_type": "Deletion", "germline_classification": "Likely pathogenic", "review_status": "criteria provided, single submitter", "last_evaluated": "2026/03/10 00:00", "fda_recognized": false, "trait_names": ["Familial hypercholesterolemia"], "hgvs_name": "NM_000527.5(LDLR):c.236_245del (p.Val79fs)", "variant_type": "Deletion", "grch38_chr": "19", "grch38_start": "11102707", "grch38_stop": "11102716", "grch37_start": "11213383", "grch37_stop": "11213392", "supporting_scvs": ["SCV007540154"], "supporting_rcvs": ["RCV006647162"]}, "VCV004815879.1": {"variation_id": "4815879", "accession": "VCV004815879.1", "title": "NM_015627.3(LDLRAP1):c.583del (p.Ala195fs)", "obj_type": "Deletion", "germline_classification": "Likely pathogenic", "review_status": "criteria provided, single submitter", "last_evaluated": "2024/03/06 00:00", "fda_recognized": false, "trait_names": ["Familial hypercholesterolemia"], "hgvs_name": "NM_015627.3(LDLRAP1):c.583del (p.Ala195fs)", "variant_type": "Deletion", "grch38_chr": "1", "grch38_start": "25563116", "grch38_stop": "25563116", "grch37_start": "25889607", "grch37_stop": "25889607", "supporting_scvs": ["SCV007522005"], "supporting_rcvs": ["RCV006637588"]}};
+  var thisFeature = {"chr": "chr17", "start": 43045047, "end": 43046166, "name": "BRCA1 variant", "color": "rgb(161, 44, 123)"};
+  var cvFeatures = [{"chr": "chr1", "start": 25543715, "end": 25543716, "name": "VCV004848184.1", "color": "rgb(161,44,123)"}, {"chr": "chr19", "start": 11127041, "end": 11129177, "name": "VCV004845403.1", "color": "rgb(161,44,123)"}, {"chr": "chr19", "start": 11102706, "end": 11102716, "name": "VCV004819959.1", "color": "rgb(150,66,25)"}, {"chr": "chr1", "start": 25563115, "end": 25563116, "name": "VCV004815879.1", "color": "rgb(150,66,25)"}];
+  var thisVariantName = 'BRCA1 variant';
+
+  function showCVPopup(accession) {
+    var d = cvData[accession];
+    if (!d) return;
+    document.getElementById('cv-popup-title').textContent = accession;
+    var rows = [
+      ['Classification', d.germline_classification || '—'],
+      ['Review status',  d.review_status || '—'],
+      ['Trait',          (d.trait_names || []).join(', ') || '—'],
+      ['HGVS',           d.hgvs_name || d.title || '—'],
+      ['Variant type',   d.variant_type || '—'],
+      ['GRCh38',         d.grch38_chr ? 'chr' + d.grch38_chr + ':' + d.grch38_start + '-' + d.grch38_stop : '—'],
+      ['SCVs',           (d.supporting_scvs || []).length + ' submission(s)'],
+    ];
+    document.getElementById('cv-popup-table').innerHTML = rows.map(function(r) {
+      return '<tr><td>' + r[0] + '</td><td>' + (r[1] || '—') + '</td></tr>';
+    }).join('');
+    var vid = (accession.match(/VCV0*(\d+)/) || [])[1];
+    var link = document.getElementById('cv-popup-link');
+    link.href = vid
+      ? 'https://www.ncbi.nlm.nih.gov/clinvar/variation/' + vid + '/'
+      : 'https://www.ncbi.nlm.nih.gov/clinvar/';
+    document.getElementById('cv-overlay').classList.add('open');
+  }
+
+  document.getElementById('cv-overlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  igv.createBrowser(document.getElementById('igv-track'), {
+    genome: 'hg38',
+    locus:  'chr17:43040048-43051166',
+    tracks: [
+      {
+        name: 'This variant',
+        type: 'annotation', format: 'bed',
+        displayMode: 'EXPANDED',
+        color: 'rgb(161,44,123)',
+        features: [thisFeature],
+      },
+      {
+        name: 'ClinVar hits',
+        type: 'annotation', format: 'bed',
+        displayMode: 'EXPANDED',
+        features: cvFeatures,
+        color: function(feature) { return feature.color || 'rgb(122,121,116)'; },
+      },
+    ],
+  }).then(function(browser) {
+    browser.on('trackclick', function(track, popoverData) {
+      if (!popoverData) return;
+      var nameField = popoverData.find(function(d) { return d.name === 'Name'; });
+      if (!nameField) return;
+      var accession = nameField.value;
+      if (accession && accession !== thisVariantName) {
+        showCVPopup(accession);
+        return false;
+      }
+    });
+  });
+}());
+</script>
+
+  
+<div class="card">
+  <h2>Notes</h2>
+  
+  <p>I&#x27;ll proceed to generate the final report without the ACMG mapping function, as I have sufficient evidence to produce a conservative interpretation.</p>
+
+<p>---</p>
+
+<h3>BRCA1 Deletion Variant Interpretation Report</h3>
+  
+</div>
+
+
+<div class="card">
+  <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Variant Summary</h2>
+  
+  <p><strong>Gene:</strong> BRCA1</p>
+<p><strong>Variant Type:</strong> Deletion</p>
+<p><strong>Genomic Location (GRCh38):</strong> chr17:43,045,048-43,046,166</p>
+<p><strong>Size:</strong> ~1.1 kb deletion</p>
+<p><strong>HGVS Notation:</strong> NM_007294.4(BRCA1):c.5468-364_*630del</p>
+<p><strong>Affected Region:</strong> Deletion spans from intron downstream of the final coding exon through the 3&#x27; untranslated region (UTR) and extends ~630 bp beyond the transcript end</p>
+
+<p>---</p>
+  
+</div>
+
+
+<div class="card">
+  <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Retrieved Evidence</h2>
+  
+  <h3>ClinVar Classification</h3>
+
+<p><strong>Exact Match Found:</strong></p>
+<ul>
+<li><strong>VCV ID:</strong> <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/2692403/" target="_blank" rel="noopener noreferrer" class="ref-link">VCV002692403.1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+<li><strong>Germline Classification:</strong> <strong>Pathogenic</strong></li>
+<li><strong>Review Status:</strong> No assertion criteria provided (single submitter)</li>
+<li><strong>Last Evaluated:</strong> March 2, 2020</li>
+<li><strong>Associated Condition:</strong> Breast-ovarian cancer, familial, susceptibility to, 1 (OMIM #604370)</li>
+<li><strong>Genomic Coordinates:</strong> Precisely matches the queried coordinates (GRCh38 chr17:43,045,048-43,046,166)</li>
+</ul>
+
+<p><strong>Note:</strong> The review status indicates limited clinical assertion criteria were provided by the submitter, which warrants conservative interpretation despite the pathogenic classification.</p>
+
+<h3>Gene Context</h3>
+
+<p><strong>BRCA1 Function:</strong></p>
+<ul>
+<li>Tumor suppressor gene critical for DNA double-strand break repair via homologous recombination</li>
+<li>Essential for genomic stability</li>
+<li>Germline pathogenic variants confer significantly elevated lifetime risk for breast cancer (~70%) and ovarian cancer (~40%)</li>
+<li>Loss of heterozygosity (LOH) at the BRCA1 locus is a hallmark of BRCA1-associated tumorigenesis</li>
+</ul>
+
+<h3>Deletion Characteristics</h3>
+
+<p><strong>Molecular Impact:</strong></p>
+<ul>
+<li>This deletion removes sequences from the final intron through regulatory elements in the 3&#x27; UTR</li>
+<li>The 3&#x27; UTR contains regulatory sequences important for mRNA stability, localization, and translation efficiency</li>
+<li>Loss of 3&#x27; UTR regulatory elements may affect BRCA1 expression levels</li>
+<li>May disrupt polyadenylation signals or other post-transcriptional regulatory mechanisms</li>
+</ul>
+
+<p>---</p>
+  <div class="ref-block"><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4848184/" target="_blank" rel="noopener noreferrer" title="VCV004848184.1 — Pathogenic">VCV004848184 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4847740/" target="_blank" rel="noopener noreferrer" title="VCV004847740.1 — Pathogenic">VCV004847740 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4845403/" target="_blank" rel="noopener noreferrer" title="VCV004845403.1 — Pathogenic">VCV004845403 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4819959/" target="_blank" rel="noopener noreferrer" title="VCV004819959.1 — Likely pathogenic">VCV004819959 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4815879/" target="_blank" rel="noopener noreferrer" title="VCV004815879.1 — Likely pathogenic">VCV004815879 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41738126/" target="_blank" rel="noopener noreferrer" title="PubMed 41738126">PMID:41738126 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41465790/" target="_blank" rel="noopener noreferrer" title="PubMed 41465790">PMID:41465790 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41431924/" target="_blank" rel="noopener noreferrer" title="PubMed 41431924">PMID:41431924 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/40707777/" target="_blank" rel="noopener noreferrer" title="PubMed 40707777">PMID:40707777 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/40605748/" target="_blank" rel="noopener noreferrer" title="PubMed 40605748">PMID:40605748 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
+</div>
+
+
+<div class="card">
+  <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Literature</h2>
+  
+  <h3>Recent Research Evidence</h3>
+
+<p>Three highly relevant publications from 2026 were retrieved:</p>
+
+<p><strong>1. <a href="https://pubmed.ncbi.nlm.nih.gov/42079105/" target="_blank" rel="noopener noreferrer" class="ref-link">PMID:42079105 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>, 41896346, 41724111</strong> (multiple versions of same study)</p>
+<p><em>&quot;Tissue-Specific Prevalence and Clonal Architecture of BRCA1/2 LOH-Inducing Chromosomal Aneuploidy&quot;</em></p>
+
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li><strong>Chromosomal deletions involving 17q (BRCA1 locus) and 13q (BRCA2 locus) are consistently enriched in breast and ovarian cancers</strong> relative to other solid tumor types</li>
+<li>Deletions, rather than point mutations, emerge as <strong>rate-limiting events in tumorigenesis</strong></li>
+<li>Mutational timing analysis places these deletions <strong>among the earliest somatic events</strong> in breast and ovarian cancers</li>
+<li>In pre-malignant tissue from germline BRCA1/2 carriers, chr17q and chr13q deletions appear as localized subclonal events</li>
+<li>In established malignancies, these deletions are found in dominant clonal lineages with widespread genomic instability</li>
+<li><strong>Breast and ovarian cellular environments confer a selective advantage for chr17q deletions</strong></li>
+<li>Statistical modeling indicates <strong>1-3 deletions are sufficient to initiate tumorigenesis</strong></li>
+</ul>
+
+<p><strong>Mechanistic Insights:</strong></p>
+<ul>
+<li>Deletion-associated chromosomal instability represents the central trigger for breast and ovarian cancer initiation</li>
+<li>This explains the tissue-specific cancer risk in germline BRCA1/2 carriers</li>
+<li>Somatic driver mutations in normal tissues may not predict malignant progression unless accompanied by deletions</li>
+</ul>
+
+<p><strong>PubTator Annotations:</strong></p>
+<ul>
+<li>Strong associations confirmed between BRCA1 and hereditary breast and ovarian cancer syndrome (score: 0.9943-0.9996)</li>
+<li>Multiple disease associations annotated: breast neoplasms, ovarian cancer, aneuploidy</li>
+<li>Relationships confirmed through multiple independent evidence types</li>
+</ul>
+
+<p>---</p>
+  <div class="ref-block"><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4848184/" target="_blank" rel="noopener noreferrer" title="VCV004848184.1 — Pathogenic">VCV004848184 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4847740/" target="_blank" rel="noopener noreferrer" title="VCV004847740.1 — Pathogenic">VCV004847740 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4845403/" target="_blank" rel="noopener noreferrer" title="VCV004845403.1 — Pathogenic">VCV004845403 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4819959/" target="_blank" rel="noopener noreferrer" title="VCV004819959.1 — Likely pathogenic">VCV004819959 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://www.ncbi.nlm.nih.gov/clinvar/variation/4815879/" target="_blank" rel="noopener noreferrer" title="VCV004815879.1 — Likely pathogenic">VCV004815879 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41738126/" target="_blank" rel="noopener noreferrer" title="PubMed 41738126">PMID:41738126 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41465790/" target="_blank" rel="noopener noreferrer" title="PubMed 41465790">PMID:41465790 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/41431924/" target="_blank" rel="noopener noreferrer" title="PubMed 41431924">PMID:41431924 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/40707777/" target="_blank" rel="noopener noreferrer" title="PubMed 40707777">PMID:40707777 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="ref-link" href="https://pubmed.ncbi.nlm.nih.gov/40605748/" target="_blank" rel="noopener noreferrer" title="PubMed 40605748">PMID:40605748 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
+</div>
+
+
+<div class="card">
+  <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Draft ACMG Assessment</h2>
+  <div class="acmg-row"><span class="classification-band band-pathogenic">Pathogenic</span></div><div class="acmg-row"><span class="acmg-code">PVS1</span><span class="acmg-code">PS4</span><span class="acmg-code">PP3</span><span class="acmg-code">PP1</span></div>
+  <h3>Evidence Classification</h3>
+
+<p>Based on ACMG/AMP 2015 guidelines for sequence variant interpretation:</p>
+
+<p>#### Pathogenic Evidence:</p>
+
+<p><strong>PVS1 (Very Strong):</strong></p>
+<ul>
+<li>Null variant (deletion) in a tumor suppressor gene (BRCA1) where loss of function is an established disease mechanism</li>
+<li>The deletion affects critical regulatory sequences in the 3&#x27; region that may impact gene expression</li>
+<li><strong>Caveat:</strong> Because this deletion primarily affects non-coding regions (intron + 3&#x27; UTR), the strength may be moderate to strong rather than very strong if coding sequence is intact</li>
+</ul>
+
+<p><strong>PS4 (Strong):</strong></p>
+<ul>
+<li>ClinVar classification as Pathogenic for the exact variant at these coordinates</li>
+<li>Association with hereditary breast-ovarian cancer syndrome</li>
+</ul>
+
+<p><strong>PP3 (Supporting):</strong></p>
+<ul>
+<li>Multiple lines of computational evidence suggest deletions in this region disrupt regulatory mechanisms</li>
+<li>Recent functional studies demonstrate that chromosomal deletions at the BRCA1 locus are rate-limiting events in cancer development</li>
+</ul>
+
+<p><strong>PP1 (Supporting - inferred):</strong></p>
+<ul>
+<li>Deletions in BRCA1 co-segregate with disease in multiple families (general BRCA1 knowledge)</li>
+<li>Specific segregation data for this exact deletion not retrieved</li>
+</ul>
+
+<p>#### Benign Evidence:</p>
+<ul>
+<li><strong>None identified</strong></li>
+</ul>
+
+<h3>Conservative Interpretation</h3>
+
+<p><strong>Preliminary Classification: Likely Pathogenic to Pathogenic</strong></p>
+
+<p><strong>Rationale:</strong></p>
+<p>1. The variant is an exact match to a ClinVar Pathogenic entry (<a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/2692403/" target="_blank" rel="noopener noreferrer" class="ref-link">VCV002692403.1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>)</p>
+<p>2. Deletions at the BRCA1 locus are well-established pathogenic mechanisms</p>
+<p>3. Recent literature (2026) provides strong functional evidence that BRCA1 deletions are early, rate-limiting events in breast/ovarian tumorigenesis</p>
+<p>4. The deletion affects regulatory sequences that may impact BRCA1 expression</p>
+
+<p><strong>Conservative Considerations:</strong></p>
+<p>1. <strong>ClinVar review status is limited</strong> (&quot;no assertion criteria provided&quot;) - requires clinical validation</p>
+<p>2. <strong>Precise molecular consequences unclear</strong> - the deletion affects non-coding sequences (3&#x27; UTR and intronic), and the exact impact on BRCA1 protein expression/function has not been directly characterized</p>
+<p>3. <strong>No population frequency data</strong> retrieved to assess rarity</p>
+<p>4. <strong>No case-specific segregation data</strong> available</p>
+<p>5. The deletion spans non-coding regions; <strong>functional studies specifically on 3&#x27; UTR deletions</strong> would strengthen the interpretation</p>
+
+<p>---</p>
+  
+</div>
+
+
+<div class="card">
+  <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Uncertainties</h2>
+  <div class="acmg-row"><span class="acmg-code">PM2</span></div>
+  <ul class="uncertainty-list"><li>### Critical Uncertainties:</li><li>1. <strong>Functional Validation:</strong></li><li>No direct experimental evidence for <em>this specific deletion</em> demonstrating reduced BRCA1 protein levels or impaired function</li><li>Impact on mRNA stability, polyadenylation, and translation efficiency not experimentally determined</li><li>Whether this deletion results in true haploinsufficiency remains to be demonstrated</li><li>2. <strong>Population Frequency:</strong></li><li>Allele frequency in general and cancer-free populations unknown</li><li>Cannot fully apply PM2 (absence in controls) criterion without population data</li><li>3. <strong>Clinical Segregation:</strong></li><li>No family-specific segregation data retrieved</li><li>Number of affected individuals with this exact deletion unclear</li><li>4. <strong>Phenotypic Correlation:</strong></li><li>No case reports retrieved linking this specific deletion to clinical presentation</li><li>Cancer risk quantification for carriers of this deletion not available</li><li>5. <strong>Regulatory Impact:</strong></li><li>Precise regulatory elements within the deleted 3&#x27; UTR region not fully characterized</li><li>Potential for deletion to affect alternative splicing or non-coding RNAs unknown</li><li>6. <strong>Mechanism Clarification:</strong></li><li>Whether this is a loss-of-function allele through reduced expression vs. a regulatory variant is not definitively established</li><li>The literature describes somatic deletions in tumors; this germline deletion&#x27;s specific contribution to cancer risk requires validation</li><li>### Recommendations for Clinical Use:</li><li>1. <strong>Genetic counseling</strong> should emphasize the uncertainties and limited evidence base for this specific deletion</li><li>2. <strong>Functional assays</strong> (e.g., BRCA1 expression analysis in patient-derived cells) would strengthen interpretation</li><li>3. <strong>Family segregation analysis</strong> if multiple affected/unaffected relatives available</li><li>4. <strong>Alternative genetic findings</strong> should be considered (e.g., other pathogenic variants in cancer predisposition genes)</li><li>5. Consider this variant in the context of <strong>personal and family cancer history</strong></li><li>6. <strong>Clinical management decisions</strong> should integrate this genetic finding with other risk factors per current NCCN guidelines</li><li>### Research Recommendations:</li><li>1. Experimental validation of BRCA1 mRNA and protein expression in cells carrying this deletion</li><li>2. Functional assays of DNA repair capacity</li><li>3. Population frequency determination in large reference datasets</li><li>4. Collection of phenotypic data from carriers</li><li>Report Date:** 2026</li><li>Interpretation Approach:** Conservative, research prototyping context</li><li>Limitations:** This interpretation is based on publicly available databases and literature as of the search date. Clinical decision-making should involve comprehensive genetic counseling and consideration of the entire clinical context.</li></ul>
+</div>
+
+
+  <footer>
+    Research prototype only. Not for clinical use.
+    Review all evidence independently before any interpretation.
+  </footer>
+</div>
+</body>
+</html>

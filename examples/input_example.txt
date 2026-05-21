@@ -1,0 +1,15 @@
+python -m src.main \
+  --variant "BRCA1 p.Val1736Ala" \
+  --gene BRCA1 \
+  --disease "hereditary breast and ovarian cancer" \
+  --cache .cache/responses.json \
+  --debug-log debug_messages.json \
+  --html report_brca1_val1736ala.html
+
+  python -m src.main \
+  --variant "BRCA1 deletion" \
+  --gene BRCA1 --chrom 17 --start 43,045,048 --end 43,046,166 \
+  --cache .cache/responses.json     \
+  --debug-log debug_messages.json     \
+  --save-md report.md     \
+  --html brca1_deletion_sample.html
