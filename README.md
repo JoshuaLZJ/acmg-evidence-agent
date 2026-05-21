@@ -1,4 +1,4 @@
-# ACMG Variant Interpretation Assistant
+# LLM-driven ACMG Variant Interpretation Agent
 
 A research prototype for ACMG-guided variant evidence retrieval, literature synthesis, and HTML report generation.
 
