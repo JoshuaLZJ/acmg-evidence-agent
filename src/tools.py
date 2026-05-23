@@ -26,6 +26,8 @@ from .sources.litvar import search_litvar as _search_litvar
 from .sources.pubmed import fetch_pubmed_abstracts as _fetch_abstracts
 from .sources.pubmed import search_pubmed as _search_pubmed
 from .sources.pubtator import get_pubtator_annotations as _get_pubtator
+from .sources.mavedb import fetch_mavedb_scores
+from .sources.spliceai import fetch_spliceai_scores
 
 
 # ---------------------------------------------------------------------------
@@ -122,6 +124,22 @@ def tool_fetch_clinvar_summary(query: str) -> str:
     except Exception as exc:
         return json.dumps({"error": str(exc), "query": query})
 
+def tool_fetch_mavedb_scores(query: str, gene: str | None = None,
+                              hgvs_terms: list[str] | None = None) -> str:
+    return fetch_mavedb_scores(query=query, gene=gene, hgvs_terms=hgvs_terms)
+
+def tool_fetch_spliceai_scores(
+    variant: str,
+    assembly: str = "GRCh38",
+    chrom: str | None = None,
+    pos: int | None = None,
+    ref: str | None = None,
+    alt: str | None = None,
+) -> str:
+    return fetch_spliceai_scores(
+        variant=variant, assembly=assembly,
+        chrom=chrom, pos=pos, ref=ref, alt=alt,
+    )
 
 def tool_map_acmg_rules(evidence_json: str) -> str:
     try:

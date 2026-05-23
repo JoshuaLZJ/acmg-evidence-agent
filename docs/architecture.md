@@ -69,6 +69,8 @@ Responsible for:
 The system may depend on:
 - ClinVar
 - PubMed
+– MaveDB
+– SpliceAI
 - local cache files
 - optional LLM APIs
 - IGV.js for interactive genome-context rendering

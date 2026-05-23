@@ -17,6 +17,8 @@ from .tools import (
     tool_normalize_variant,
     tool_search_litvar,
     tool_search_pubmed,
+    tool_fetch_mavedb_scores,
+    tool_fetch_spliceai_scores,
 )
 
 # ---------------------------------------------------------------------------
@@ -105,6 +107,44 @@ TOOLS = [
         },
     },
     {
+        "name": "fetch_mavedb_scores",
+        "description": (
+            "Search MaveDB for deep mutational scanning (DMS) functional scores for a variant. "
+            "Call at most once per run. Use gene symbol + HGVS terms. "
+            "Supports PS3/BS3 functional evidence. Only useful for missense or small coding variants — skip for SVs."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query":       {"type": "string"},
+                "gene":        {"type": ["string", "null"]},
+                "hgvs_terms":  {"type": "array", "items": {"type": "string"}},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "fetch_spliceai_scores",
+        "description": (
+            "Retrieve SpliceAI splice-effect delta scores from the Broad Institute public API. "
+            "Call at most once per run. Requires a SNV or small indel with known VCF coordinates. "
+            "Do NOT call for SVs (duplications, deletions >50bp) or when ref/alt alleles are unknown. "
+            "Returns delta scores (DS_AG, DS_AL, DS_DG, DS_DL) and an ACMG PS3/BP4 hint."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "variant":  {"type": "string"},
+                "assembly": {"type": "string", "enum": ["GRCh38", "GRCh37"]},
+                "chrom":    {"type": ["string", "null"]},
+                "pos":      {"type": ["integer", "null"]},
+                "ref":      {"type": ["string", "null"]},
+                "alt":      {"type": ["string", "null"]},
+            },
+            "required": ["variant"],
+        },
+    },
+    {
         "name": "map_acmg_rules",
         "description": "Map structured evidence JSON to a draft ACMG assessment. Call only if structured evidence has already been extracted.",
         "input_schema": {
@@ -122,6 +162,8 @@ TOOL_FUNCTIONS: Dict[str, Any] = {
     "search_pubmed": tool_search_pubmed,
     "fetch_pubmed_abstracts": tool_fetch_pubmed_abstracts,
     "get_pubtator_annotations": tool_get_pubtator_annotations,
+    "fetch_mavedb_scores":  tool_fetch_mavedb_scores,
+    "fetch_spliceai_scores": tool_fetch_spliceai_scores,
     "map_acmg_rules": tool_map_acmg_rules,
 }
 
@@ -133,6 +175,8 @@ MAX_TOOL_CALLS_PER_NAME: Dict[str, int] = {
     "search_pubmed": 1,
     "fetch_pubmed_abstracts": 1,
     "get_pubtator_annotations": 1,
+    "fetch_mavedb_scores":  1,
+    "fetch_spliceai_scores": 1,
     "map_acmg_rules": 1,
 }
 

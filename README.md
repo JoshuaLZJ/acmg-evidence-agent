@@ -2,6 +2,24 @@
 
 A research prototype for ACMG-guided variant evidence retrieval, literature synthesis, and HTML report generation.
 
+***
+
+## 👋 Welcome — Try It Out!
+
+We'd love for you to test this prototype and share your experience!
+
+This tool is an early-stage research assistant for ACMG variant interpretation. Whether you're a clinical geneticist, bioinformatician, or researcher, your feedback helps shape what it becomes.
+
+**To get started:**
+1. Follow the [Setup](#setup) instructions below to install dependencies.
+2. Run the [example command](#run) with a variant of your choosing.
+3. Review the generated HTML report and check the cached responses.
+4. Open an issue or reach out with any bugs, surprises, or suggestions — all feedback welcome.
+
+> ⚠️ **Please note:** This is a research prototype only. All outputs require independent expert review before any clinical use.
+
+***
+
 ## Features
 - Python wrappers for ClinVar, PubMed, LitVar, and PubTator
 - A basic ACMG rule-mapping scaffold
@@ -9,6 +27,8 @@ A research prototype for ACMG-guided variant evidence retrieval, literature synt
 - Anthropic tool-calling pipeline for evidence synthesis
 - Cache-backed response storage for faster reruns
 - HTML report generation with structured evidence sections
+
+***
 
 ## Setup
 ```bash
@@ -18,6 +38,8 @@ pip install -r requirements.txt
 ```
 
 Set `ANTHROPIC_API_KEY` in `.env`.
+
+***
 
 ## Run
 ```bash
@@ -30,16 +52,22 @@ python -m src.main \
   --html report_brca1_val1736ala.html
 ```
 
+***
+
 ## Example output
 The pipeline produces:
 - a structured text interpretation
 - cached API responses for reuse
 - an HTML report for review
 
+***
+
 ## Notes
 - This is a research prototype, not a clinical decision tool.
 - Outputs require independent expert review before any clinical interpretation.
 - Some source-specific parsing may need adjustment depending on upstream API schema changes.
+
+***
 
 ## Repository structure
 ```text
@@ -53,9 +81,12 @@ docs/
   architecture.md
 ```
 
+***
+
 ## Architecture
 A short overview of the system design, module layout, and data flow is available in [docs/architecture.md](docs/architecture.md).
 
+***
 
 ## Future work
 - Fine-tune open LLMs on variant interpretation exemplars using parameter-efficient methods such as QLoRA, with the goal of supporting an in-house model for evidence synthesis and reducing reliance on external hosted models.
