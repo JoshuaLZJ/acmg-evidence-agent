@@ -18,6 +18,12 @@ ENV/
 # Jupyter
 .ipynb_checkpoints/
 
+# HuggingFace checkpoints
+checkpoints/
+
+# unsloth cache
+unsloth_compiled_cache/
+
 # Build / packaging
 build/
 dist/

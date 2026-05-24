@@ -313,7 +313,25 @@ def run_agent(
     model: str = "claude-sonnet-4-5",
     debug: bool = True,
     debug_log: Optional[str] = None,
+    use_ollama: bool = False,           # NEW
+    ollama_host: str = "http://localhost:11434",  # NEW
 ) -> str:
+    if use_ollama:
+        from openai import OpenAI 
+        client = OpenAI(
+            base_url=f"{ollama_host}/v1",
+            api_key="ollama",       # required but ignored by Ollama
+        )
+        # Ollama doesn't support tool_use natively — run as single-shot
+        response = client.chat.completions.create(
+            model=model,            # e.g. "acmg-agent"
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user",   "content": user_prompt},
+            ],
+            temperature=0.1,
+        )
+        return response.choices[0].message.content or ""
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         return "ANTHROPIC_API_KEY is not set. Add it to your .env file and rerun."
@@ -500,6 +518,9 @@ Examples:
         help="Path to responses cache JSON for report rendering")
     parser.add_argument("--save-md", default=None, dest="save_md",
         help="Save raw markdown output to this file for later re-rendering")
+    parser.add_argument("--ollama", action="store_true",
+    help="Use local Ollama model instead of Anthropic API")
+    parser.add_argument("--ollama-host", default="http://localhost:11434")
 
     args = parser.parse_args()
 

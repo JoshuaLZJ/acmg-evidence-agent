@@ -124,22 +124,40 @@ def tool_fetch_clinvar_summary(query: str) -> str:
     except Exception as exc:
         return json.dumps({"error": str(exc), "query": query})
 
-def tool_fetch_mavedb_scores(query: str, gene: str | None = None,
-                              hgvs_terms: list[str] | None = None) -> str:
-    return fetch_mavedb_scores(query=query, gene=gene, hgvs_terms=hgvs_terms)
+def tool_fetch_mavedb_scores(
+    query: str,
+    gene: Optional[str] = None,
+    hgvs_terms: Optional[list[str]] = None,
+) -> str:
+    key = "{0}|{1}|{2}".format(query, gene or "", ",".join(hgvs_terms or []))
+    try:
+        return _cached("mavedb", key,
+                       lambda: _safe_str(fetch_mavedb_scores(
+                           query=query, gene=gene, hgvs_terms=hgvs_terms
+                       )))
+    except Exception as exc:
+        return json.dumps({"error": str(exc), "query": query})
+
 
 def tool_fetch_spliceai_scores(
     variant: str,
     assembly: str = "GRCh38",
-    chrom: str | None = None,
-    pos: int | None = None,
-    ref: str | None = None,
-    alt: str | None = None,
+    chrom: Optional[str] = None,
+    pos: Optional[int] = None,
+    ref: Optional[str] = None,
+    alt: Optional[str] = None,
 ) -> str:
-    return fetch_spliceai_scores(
-        variant=variant, assembly=assembly,
-        chrom=chrom, pos=pos, ref=ref, alt=alt,
+    key = "{0}|{1}|{2}|{3}|{4}|{5}".format(
+        variant, assembly, chrom or "", pos or "", ref or "", alt or ""
     )
+    try:
+        return _cached("spliceai", key,
+                       lambda: _safe_str(fetch_spliceai_scores(
+                           variant=variant, assembly=assembly,
+                           chrom=chrom, pos=pos, ref=ref, alt=alt,
+                       )))
+    except Exception as exc:
+        return json.dumps({"error": str(exc), "variant": variant})
 
 def tool_map_acmg_rules(evidence_json: str) -> str:
     try:

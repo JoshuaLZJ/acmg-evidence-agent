@@ -6,10 +6,19 @@ python -m src.main \
   --debug-log debug_messages.json \
   --html report_brca1_val1736ala.html
 
-  python -m src.main \
+python -m src.main \
   --variant "BRCA1 deletion" \
   --gene BRCA1 --chrom 17 --start 43,045,048 --end 43,046,166 \
   --cache .cache/responses.json     \
   --debug-log debug_messages.json     \
   --save-md report.md     \
   --html brca1_deletion_sample.html
+
+
+python -m src.main \
+  --variant "BRCA2 deletion" \
+  --gene BRCA2 --chrom 13 --start 32,325,651 --end 32,327,136 \
+  --cache .cache/responses.json     \
+  --debug-log debug_messages.json     \
+  --save-md report.md     \
+  --html brca2_deletion_sample.html
