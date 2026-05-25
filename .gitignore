@@ -37,6 +37,12 @@ dist/
 *.swo
 .DS_Store
 
+# Cursor / AI agent metadata (local-only, never commit)
+.cursor/
+.cursorrules
+AGENTS.md
+AGENTS.MD
+
 # Local environment and secrets
 .env
 .env.*
