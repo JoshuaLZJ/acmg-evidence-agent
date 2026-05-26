@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install ruff pytest
+          pip install -e ".[dev]" 2>/dev/null || pip install -r requirements.txt
+
+      - name: Lint
+        run: ruff check src/ scripts/
+
+      - name: Test
+        run: pytest tests/ -x -q --ignore=tests/integration
+        # --ignore=tests/integration skips any test that needs APIs/GPU
